@@ -1,16 +1,13 @@
-
-if __name__ == '__main__':
 import sys
+if __name__ == '__main__':
     if len(sys.argv) != 2:
         print('Usage: <exe> <samfile>')
         sys.exit()
 
 import pysam
-
-def parse_samentry():
-    file.sam = input("SAMFile:")
-    samfile = pysam.AlignmentFile("file.sam", "r")     # Open the SAM file for reading
-
+file = input("file")
+def parse_samentry(file):
+    samfile = pysam.AlignmentFile("file", "r")     # Open the SAM file for reading
     # Iterate over the alignments in the SAM file
     for alignment in samfile:
         pos = alignment.pos  # get "POS" data from the alignment___is integer type
