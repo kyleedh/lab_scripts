@@ -8,8 +8,8 @@ if __name__ == '__main__':
 import pysam
 
 def parse_samentry():
-    pass
-    samfile = pysam.AlignmentFile("example.sam", "r")     # Open the SAM file for reading
+    file.sam = input("SAMFile:")
+    samfile = pysam.AlignmentFile("file.sam", "r")     # Open the SAM file for reading
 
     # Iterate over the alignments in the SAM file
     for alignment in samfile:
@@ -17,10 +17,8 @@ def parse_samentry():
         print(f"Read {alignment.qname} is mapped to position {pos}")  # check that position data is right
 
         fields = alignment.strip().split("\t")  # split the alignment header up
-        read_name = fields[
-            0]  # first "column"/chunk of info in header is read name includes start and end of synthetic read
-
-        numbers = ""  # get start and stop positions from the read name
+        read_name = fields[0]  # first "column"/chunk of info in header is read name includes start and end of synthetic read
+        readpos = ""  # get start and stop positions from the read name
         for character in read_name:  # going to produce error if ex pos = 145 readstart = 1450
             if character.isdigit():  # how to do this UNTIL finds "_" ???
                 readpos += character
@@ -29,7 +27,6 @@ def parse_samentry():
 
 
 def compute_hits():
-    pass
     correct_map = 0
     incorrect_map = 0
     correct_reads = []
@@ -43,16 +40,13 @@ def compute_hits():
 
 
 def compute_error():
-    pass
     start_pos = int(readpos[0:len(str(pos))])
     change_val = abs((pos - start_pos))
 
 
 import matplotlib.pyplot as plt
 
-
 def plot_stuff():
-    pass
     x = ["correct", "incorrect"]
     y = ["correct_map", "incorrect_map"]
     plt.bar(x, y, color='green', width=0.3)
