@@ -9,26 +9,20 @@ file = input("file")
 def parse_samentry(file):
     samfile = pysam.AlignmentFile("file", "r")     # Open the SAM file for reading
     # Iterate over the alignments in the SAM file
+    global position, read_name, read_start, read_end # does this mess up ability to iterate over all alignments in the file?
     for alignment in samfile:
-        pos = alignment.pos  # get "POS" data from the alignment___is integer type
-        print(f"Read {alignment.qname} is mapped to position {pos}")  # check that position data is right
-
-        fields = alignment.strip().split("\t")  # split the alignment header up
-        read_name = fields[0]  # first "column"/chunk of info in header is read name includes start and end of synthetic read
-        readpos = ""  # get start and stop positions from the read name
-        for character in read_name:  # going to produce error if ex pos = 145 readstart = 1450
-            if character.isdigit():  # how to do this UNTIL finds "_" ???
-                readpos += character
-                readpos = int(readpos)
-                print(f"Read {read_name} contains the number {readpos}")
-
+        position = alignment.reference_start  # get "POS" data from the alignment___is integer type
+        print(f"Read {alignment.query_name} is mapped to position {pos}")  # check that position data is right
+        read_name = alignment.query_name
+        read_start = int(read_name.split("_")[4]) + 1 # read start position in query name +1 to adjust to pos data (0 vs 1 based)
+        read_end = int(read_name.split("_")[5]) + 1
 
 def compute_hits():
     correct_map = 0
     incorrect_map = 0
     correct_reads = []
     incorrect_reads = []
-    if int(readpos[0:len(str(pos))]) == pos:
+    if read_start == position:
         correct_map += 1
         correct_reads.append(read_name)  ##add read name to list
     else:
@@ -37,9 +31,12 @@ def compute_hits():
 
 
 def compute_error():
-    start_pos = int(readpos[0:len(str(pos))])
-    change_val = abs((pos - start_pos))
-
+    global change_val
+    change_val = abs((position - read_start))
+    if change_val == 0:
+        print(str(read_name) + "mapped correctly")
+    else:
+        print(str(read_name)+ "mapped incorrectly")
 
 import matplotlib.pyplot as plt
 
@@ -59,3 +56,12 @@ def plot_stuff():
 
 # Open the SAM file for reading
 # with open("example.sam", "r") as samfile:
+#  for character in read_name:  # going to produce error if ex pos = 145 readstart = 1450
+#    if character.isdigit():  # how to do this UNTIL finds "_" ???
+#       readpos += character
+#      readpos = int(readpos)
+#     print(f"Read {read_name} contains the number {readpos}")
+
+# fields = alignment.strip().split("\t")  # split the alignment header up
+# read_name = fields[0]  # first "column"/chunk of info in header is read name includes start and end of synthetic read
+#readpos = ""  # get start and stop positions from the read name
