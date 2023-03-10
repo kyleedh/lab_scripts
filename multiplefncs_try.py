@@ -48,4 +48,5 @@ if __name__ == '__main__':
     mapping_error = compute_error(mapped_pos, ground_truth)
     print('num_correct', num_correct, 'num_incorrect', num_incorrect)
     print('mean error', np.mean(mapping_error), 'error sum', sum(mapping_error))
+    # add violin plot to show mapping errors
 
